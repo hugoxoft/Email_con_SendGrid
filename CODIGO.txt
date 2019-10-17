@@ -1,0 +1,30 @@
+El SendGrid es un servicio de envió de correo electrónico en la nube, el SendGrid dentro de Azure es un proveedor externo ya que no es directamente  de Microsoft.
+Para poder utilizar SendGrid dentro de nuestra aplicación .NET para Azure debemos crear una cuenta.
+Debemos teclear el nombre, contraseña, seleccionar la suscripción y el grupo de nuestro recurso.
+También debemos seleccionar el tipo de servicio que usaremos, podemos probar el FREE que te dejara enviar 25,000 email al mes.
+En la configuración debemos seleccionar el USERNAME, SMTP SERVER y recordar nuestra contraseña ya que estos datos los teclearemos en nuestro código para el envió de los email.
+
+ Protected Sub enviar_email()
+        Dim correo As New System.Net.Mail.MailMessage
+        correo.From = New System.Net.Mail.MailAddress("noreply@midominio.com")
+        correo.To.Add("para@midomino.com")
+        correo.CC.Add("copcopia@midominio.com")
+        correo.Bcc.Add("concopiaoculta@midominio.com")
+        correo.Subject = "Titulo de mi envió"
+        correo.Body = "Contenido de mi envió en color <Font Color=Blue>AZUL</Font> y <strong>NEGRITA</strong>" & _
+                  "<br>" & _
+                  "También en color <Font Color=Red>ROJO</Font>" & _
+                  "<br>" & _
+                  "Saludos"
+        correo.IsBodyHtml = True
+        correo.Priority = System.Net.Mail.MailPriority.Normal
+        Dim smtp As New System.Net.Mail.SmtpClient("smtp.sendgrid.net")
+        smtp.UseDefaultCredentials = False
+        smtp.Credentials = New System.Net.NetworkCredential("azure_000000000000000000000@azure.com", "Contraseña")
+        Try
+            smtp.Send(correo)
+            Me.Label_mensaje.Text ="Se envió la notificación."
+        Catch ex As Exception
+            Me.Label_mensaje.Text =ex.Message
+        End Try
+    End Sub
